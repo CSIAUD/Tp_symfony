@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -21,7 +19,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $email;
 
     #[ORM\Column(type: 'json')]
-    private $roles = [];
+    private $roles = ["ROLE_USER"];
 
     #[ORM\Column(type: 'string')]
     private $password;
@@ -35,16 +33,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 255)]
     private $lastname;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $sessiontoken;
 
     #[ORM\OneToOne(targetEntity: Image::class, cascade: ['persist', 'remove'])]
-    private $Image;
-
-    public function __construct()
-    {
-        $this->image = new ArrayCollection();
-    }
+    private $image;
 
     public function getId(): ?int
     {
@@ -157,7 +150,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->sessiontoken;
     }
 
-    public function setSessiontoken(string $sessiontoken): self
+    public function setSessiontoken(?string $sessiontoken): self
     {
         $this->sessiontoken = $sessiontoken;
 
@@ -166,12 +159,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getImage(): ?Image
     {
-        return $this->Image;
+        return $this->image;
     }
 
-    public function setImage(?Image $Image): self
+    public function setImage(?Image $image): self
     {
-        $this->Image = $Image;
+        $this->image = $image;
 
         return $this;
     }

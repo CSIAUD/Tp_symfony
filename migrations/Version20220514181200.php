@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220513151610 extends AbstractMigration
+final class Version20220514181200 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,10 +20,7 @@ final class Version20220513151610 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE image DROP FOREIGN KEY FK_C53D045FA76ED395');
-        $this->addSql('DROP INDEX IDX_C53D045FA76ED395 ON image');
-        $this->addSql('ALTER TABLE image DROP user_id');
-        $this->addSql('ALTER TABLE user ADD image_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE user ADD image_id INT DEFAULT NULL, ADD username VARCHAR(255) NOT NULL, ADD firstname VARCHAR(255) NOT NULL, ADD lastname VARCHAR(255) NOT NULL, ADD sessiontoken VARCHAR(255) DEFAULT NULL');
         $this->addSql('ALTER TABLE user ADD CONSTRAINT FK_8D93D6493DA5256D FOREIGN KEY (image_id) REFERENCES image (id)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D6493DA5256D ON user (image_id)');
     }
@@ -31,11 +28,8 @@ final class Version20220513151610 extends AbstractMigration
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE image ADD user_id INT NOT NULL');
-        $this->addSql('ALTER TABLE image ADD CONSTRAINT FK_C53D045FA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
-        $this->addSql('CREATE INDEX IDX_C53D045FA76ED395 ON image (user_id)');
         $this->addSql('ALTER TABLE user DROP FOREIGN KEY FK_8D93D6493DA5256D');
         $this->addSql('DROP INDEX UNIQ_8D93D6493DA5256D ON user');
-        $this->addSql('ALTER TABLE user DROP image_id');
+        $this->addSql('ALTER TABLE user DROP image_id, DROP username, DROP firstname, DROP lastname, DROP sessiontoken');
     }
 }
